@@ -10,17 +10,21 @@
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write",
     "format": "biome format --write .",
-    "format:check": "biome format ."
+    "format:check": "biome format .",
+    "generate:api": "curl -k https://local.api.lydos/doc -o src/lib/openapi.json && openapi-typescript src/lib/openapi.json -o src/lib/api-types.ts"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.90.21",
     "expo": "~54.0.33",
     "expo-status-bar": "~3.0.9",
+    "openapi-fetch": "^0.17.0",
     "react": "19.1.0",
     "react-native": "0.81.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.13",
     "@types/react": "~19.1.0",
+    "openapi-typescript": "^7.13.0",
     "typescript": "~5.9.2"
   },
   "private": true
