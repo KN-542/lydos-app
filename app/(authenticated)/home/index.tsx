@@ -5,11 +5,11 @@ import { useEffect, useRef, useState } from 'react'
 import {
   Animated,
   FlatList,
+  Image,
   KeyboardAvoidingView,
   Modal,
   Platform,
   Pressable,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -40,7 +40,8 @@ export default function ChatScreen() {
   const [chatHistories, setChatHistories] = useState<ChatHistory[]>([])
   const [currentChatId, setCurrentChatId] = useState<string | null>(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const [isDrawerSettingsOpen, setIsDrawerSettingsOpen] = useState(false)
   const flatListRef = useRef<FlatList<Message>>(null)
   const drawerAnim = useRef(new Animated.Value(-400)).current
 
@@ -105,34 +106,23 @@ export default function ChatScreen() {
   }
 
   const handleSignOut = async () => {
-    setIsSettingsOpen(false)
+    setIsProfileOpen(false)
     await signOut()
     router.replace('/')
   }
 
   const renderMessage = ({ item }: { item: Message }) => (
-    <View
-      style={[
-        styles.messageWrapper,
-        item.role === 'user' ? styles.messageWrapperUser : styles.messageWrapperAssistant,
-      ]}
-    >
+    <View className={`mb-4${item.role === 'user' ? ' items-end' : ' items-start'}`}>
       <View
-        style={[
-          styles.messageBubble,
-          item.role === 'user' ? styles.messageBubbleUser : styles.messageBubbleAssistant,
-        ]}
+        className={`max-w-[80%] rounded-[18px] px-4 py-[10px]${item.role === 'user' ? ' bg-gray-700' : ' bg-gray-100'}`}
       >
         <Text
-          style={[
-            styles.messageText,
-            item.role === 'user' ? styles.messageTextUser : styles.messageTextAssistant,
-          ]}
+          className={`text-[15px] leading-[22px]${item.role === 'user' ? ' text-white' : ' text-gray-900'}`}
         >
           {item.content}
         </Text>
       </View>
-      <Text style={styles.messageTime}>
+      <Text className="text-[11px] text-gray-400 mt-1 mx-1">
         {item.timestamp.toLocaleString('ja-JP', {
           month: '2-digit',
           day: '2-digit',
@@ -144,29 +134,31 @@ export default function ChatScreen() {
   )
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       {/* ヘッダー */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => setIsDrawerOpen(true)}
-          style={styles.headerButton}
-          hitSlop={8}
-        >
+      <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
+        <TouchableOpacity onPress={() => setIsDrawerOpen(true)} className="p-1" hitSlop={8}>
           <Menu size={22} color="#374151" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Lydos</Text>
-        <TouchableOpacity
-          onPress={() => setIsSettingsOpen(true)}
-          style={styles.headerButton}
-          hitSlop={8}
-        >
-          <Settings size={22} color="#374151" />
+        <Text className="text-lg font-bold text-gray-900">Lydos</Text>
+        <TouchableOpacity onPress={() => setIsProfileOpen(true)} className="p-1" hitSlop={8}>
+          {user?.imageUrl ? (
+            <Image source={{ uri: user.imageUrl }} className="w-8 h-8 rounded-2xl" />
+          ) : (
+            <View className="w-8 h-8 rounded-2xl bg-gray-700 items-center justify-center">
+              <Text className="text-white text-sm font-semibold">
+                {(user?.firstName ??
+                  user?.primaryEmailAddress?.emailAddress ??
+                  '?')[0].toUpperCase()}
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
 
       {/* チャットエリア */}
       <KeyboardAvoidingView
-        style={styles.chatArea}
+        className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={0}
       >
@@ -175,19 +167,19 @@ export default function ChatScreen() {
           data={messages}
           renderItem={renderMessage}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.messageList}
+          contentContainerStyle={{ padding: 16, paddingBottom: 8, flexGrow: 1 }}
           ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>メッセージを入力してください</Text>
+            <View className="flex-1 items-center justify-center pt-20">
+              <Text className="text-sm text-gray-400">メッセージを入力してください</Text>
             </View>
           }
         />
 
         {/* 入力エリア */}
-        <SafeAreaView edges={['bottom']} style={styles.inputArea}>
-          <View style={styles.inputRow}>
+        <SafeAreaView edges={['bottom']} className="border-t border-gray-200 bg-white">
+          <View className="flex-row items-end px-3 py-[10px] gap-2">
             <TextInput
-              style={styles.input}
+              className="flex-1 min-h-[44px] max-h-[120px] border border-gray-300 rounded-[22px] px-4 py-[10px] text-[15px] text-gray-900 bg-gray-50"
               value={prompt}
               onChangeText={setPrompt}
               placeholder="メッセージを入力..."
@@ -196,7 +188,7 @@ export default function ChatScreen() {
               maxLength={1000}
             />
             <TouchableOpacity
-              style={[styles.sendButton, !prompt.trim() && styles.sendButtonDisabled]}
+              className={`w-11 h-11 rounded-[22px] bg-gray-900 items-center justify-center${!prompt.trim() ? ' opacity-40' : ''}`}
               onPress={handleSendMessage}
               disabled={!prompt.trim()}
             >
@@ -208,24 +200,22 @@ export default function ChatScreen() {
 
       {/* サイドドロワー（チャット履歴） */}
       <Modal visible={isDrawerOpen} transparent animationType="none" onRequestClose={closeDrawer}>
-        <Pressable style={styles.drawerOverlay} onPress={closeDrawer}>
-          <Animated.View style={[styles.drawer, { transform: [{ translateX: drawerAnim }] }]}>
-            <Pressable style={styles.drawerContent} onPress={() => {}}>
-              <View style={[styles.drawerHeader, { paddingTop: insets.top + 14 }]}>
-                <Text style={styles.drawerTitle}>チャット履歴</Text>
-                <View style={styles.drawerHeaderActions}>
-                  <TouchableOpacity
-                    onPress={createNewChat}
-                    style={styles.drawerHeaderButton}
-                    hitSlop={8}
-                  >
+        <Pressable className="flex-1 bg-black/40 flex-row" onPress={closeDrawer}>
+          <Animated.View
+            className="w-3/4 max-w-[300px] bg-gray-50 h-full"
+            style={{ transform: [{ translateX: drawerAnim }] }}
+          >
+            <Pressable className="flex-1" onPress={() => {}}>
+              <View
+                className="flex-row items-center justify-between px-4 py-[14px] border-b border-gray-200"
+                style={{ paddingTop: insets.top + 14 }}
+              >
+                <Text className="text-[15px] font-semibold text-gray-700">チャット履歴</Text>
+                <View className="flex-row gap-1">
+                  <TouchableOpacity onPress={createNewChat} className="p-1" hitSlop={8}>
                     <Plus size={20} color="#374151" />
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={closeDrawer}
-                    style={styles.drawerHeaderButton}
-                    hitSlop={8}
-                  >
+                  <TouchableOpacity onPress={closeDrawer} className="p-1" hitSlop={8}>
                     <X size={20} color="#374151" />
                   </TouchableOpacity>
                 </View>
@@ -236,71 +226,101 @@ export default function ChatScreen() {
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                   <TouchableOpacity
-                    style={[
-                      styles.chatHistoryItem,
-                      currentChatId === item.id && styles.chatHistoryItemActive,
-                    ]}
+                    className={`px-4 py-3 rounded-lg mx-2 my-0.5${currentChatId === item.id ? ' bg-gray-200' : ''}`}
                     onPress={() => {
                       setCurrentChatId(item.id)
                       closeDrawer()
                     }}
                   >
-                    <Text style={styles.chatHistoryTitle} numberOfLines={1}>
+                    <Text className="text-sm text-gray-700" numberOfLines={1}>
                       {item.title}
                     </Text>
                   </TouchableOpacity>
                 )}
-                ListEmptyComponent={<Text style={styles.chatHistoryEmpty}>履歴がありません</Text>}
+                ListEmptyComponent={
+                  <Text className="px-4 pt-4 text-[13px] text-gray-400">履歴がありません</Text>
+                }
               />
+
+              {/* ドロワーフッター（設定） */}
+              <View className="border-t border-gray-200 pt-1 pb-5">
+                {isDrawerSettingsOpen && (
+                  <View className="border-t border-gray-200 bg-white rounded-lg mx-2 mb-1 overflow-hidden">
+                    <TouchableOpacity
+                      className="flex-row items-center gap-[10px] px-4 py-3 rounded-lg mx-2 my-0.5"
+                      onPress={() => {
+                        setIsDrawerSettingsOpen(false)
+                        router.push('/(authenticated)/setting/plan')
+                        closeDrawer()
+                      }}
+                    >
+                      <Text className="text-sm text-gray-700">プラン変更</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className="flex-row items-center gap-[10px] px-4 py-3 rounded-lg mx-2 my-0.5"
+                      onPress={() => {
+                        setIsDrawerSettingsOpen(false)
+                        router.push('/(authenticated)/setting/payment')
+                        closeDrawer()
+                      }}
+                    >
+                      <Text className="text-sm text-gray-700">お支払い方法</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+                <TouchableOpacity
+                  className={`flex-row items-center gap-[10px] px-4 py-3 rounded-lg mx-2 my-0.5${isDrawerSettingsOpen ? ' bg-gray-200' : ''}`}
+                  onPress={() => setIsDrawerSettingsOpen((v) => !v)}
+                >
+                  <Settings size={16} color="#6B7280" />
+                  <Text className="text-sm text-gray-700">設定</Text>
+                </TouchableOpacity>
+              </View>
             </Pressable>
           </Animated.View>
         </Pressable>
       </Modal>
 
-      {/* 設定モーダル */}
+      {/* プロフィールモーダル */}
       <Modal
-        visible={isSettingsOpen}
+        visible={isProfileOpen}
         transparent
         animationType="fade"
-        onRequestClose={() => setIsSettingsOpen(false)}
+        onRequestClose={() => setIsProfileOpen(false)}
       >
         <Pressable
-          style={[styles.settingsOverlay, { paddingTop: insets.top + 60 }]}
-          onPress={() => setIsSettingsOpen(false)}
+          className="flex-1 bg-black/30 justify-start items-end pr-3"
+          style={{ paddingTop: insets.top + 60 }}
+          onPress={() => setIsProfileOpen(false)}
         >
-          <Pressable style={styles.settingsMenu} onPress={() => {}}>
+          <Pressable
+            className="bg-white rounded-xl shadow-md min-w-[200px] overflow-hidden"
+            style={{
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.12,
+              shadowRadius: 12,
+              elevation: 8,
+            }}
+            onPress={() => {}}
+          >
             {user && (
-              <View style={styles.settingsUserInfo}>
-                <Text style={styles.settingsUserEmail} numberOfLines={1}>
+              <View className="px-4 py-3 border-b border-gray-100">
+                {user.fullName && (
+                  <Text className="text-sm font-semibold text-gray-900 mb-0.5" numberOfLines={1}>
+                    {user.fullName}
+                  </Text>
+                )}
+                <Text className="text-[13px] text-gray-500" numberOfLines={1}>
                   {user.primaryEmailAddress?.emailAddress}
                 </Text>
               </View>
             )}
 
-            <TouchableOpacity
-              style={styles.settingsItem}
-              onPress={() => {
-                setIsSettingsOpen(false)
-                router.push('/(authenticated)/setting/plan')
-              }}
-            >
-              <Text style={styles.settingsItemText}>プラン変更</Text>
-            </TouchableOpacity>
+            <View className="h-px bg-gray-100" />
 
-            <TouchableOpacity
-              style={styles.settingsItem}
-              onPress={() => {
-                setIsSettingsOpen(false)
-                router.push('/(authenticated)/setting/payment')
-              }}
-            >
-              <Text style={styles.settingsItemText}>お支払い方法</Text>
-            </TouchableOpacity>
-
-            <View style={styles.settingsDivider} />
-
-            <TouchableOpacity style={styles.settingsItem} onPress={handleSignOut}>
-              <Text style={[styles.settingsItemText, styles.settingsItemDanger]}>ログアウト</Text>
+            <TouchableOpacity className="px-4 py-[14px]" onPress={handleSignOut}>
+              <Text className="text-[15px] text-red-500">ログアウト</Text>
             </TouchableOpacity>
           </Pressable>
         </Pressable>
@@ -308,229 +328,3 @@ export default function ChatScreen() {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-
-  // ヘッダー
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    backgroundColor: '#F9FAFB',
-  },
-  headerButton: {
-    padding: 4,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#111827',
-  },
-
-  // チャットエリア
-  chatArea: {
-    flex: 1,
-  },
-  messageList: {
-    padding: 16,
-    paddingBottom: 8,
-    flexGrow: 1,
-  },
-  emptyContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 80,
-  },
-  emptyText: {
-    fontSize: 14,
-    color: '#9CA3AF',
-  },
-
-  // メッセージ
-  messageWrapper: {
-    marginBottom: 16,
-  },
-  messageWrapperUser: {
-    alignItems: 'flex-end',
-  },
-  messageWrapperAssistant: {
-    alignItems: 'flex-start',
-  },
-  messageBubble: {
-    maxWidth: '80%',
-    borderRadius: 18,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-  },
-  messageBubbleUser: {
-    backgroundColor: '#374151',
-  },
-  messageBubbleAssistant: {
-    backgroundColor: '#F3F4F6',
-  },
-  messageText: {
-    fontSize: 15,
-    lineHeight: 22,
-  },
-  messageTextUser: {
-    color: '#fff',
-  },
-  messageTextAssistant: {
-    color: '#111827',
-  },
-  messageTime: {
-    fontSize: 11,
-    color: '#9CA3AF',
-    marginTop: 4,
-    marginHorizontal: 4,
-  },
-
-  // 入力エリア
-  inputArea: {
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#fff',
-  },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    gap: 8,
-  },
-  input: {
-    flex: 1,
-    minHeight: 44,
-    maxHeight: 120,
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 22,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    fontSize: 15,
-    color: '#111827',
-    backgroundColor: '#F9FAFB',
-  },
-  sendButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#111827',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sendButtonDisabled: {
-    opacity: 0.4,
-  },
-
-  // サイドドロワー
-  drawerOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    flexDirection: 'row',
-  },
-  drawer: {
-    width: '75%',
-    maxWidth: 300,
-    backgroundColor: '#F9FAFB',
-    height: '100%',
-  },
-  drawerContent: {
-    flex: 1,
-  },
-  drawerHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
-  drawerTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#374151',
-  },
-  drawerHeaderActions: {
-    flexDirection: 'row',
-    gap: 4,
-  },
-  drawerHeaderButton: {
-    padding: 4,
-  },
-  chatHistoryItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginHorizontal: 8,
-    marginVertical: 2,
-  },
-  chatHistoryItemActive: {
-    backgroundColor: '#E5E7EB',
-  },
-  chatHistoryTitle: {
-    fontSize: 14,
-    color: '#374151',
-  },
-  chatHistoryEmpty: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    fontSize: 13,
-    color: '#9CA3AF',
-  },
-
-  // 設定モーダル
-  settingsOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-    paddingRight: 12,
-  },
-  settingsMenu: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 8,
-    minWidth: 200,
-    overflow: 'hidden',
-  },
-  settingsUserInfo: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
-  },
-  settingsUserEmail: {
-    fontSize: 13,
-    color: '#6B7280',
-  },
-  settingsItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  settingsItemText: {
-    fontSize: 15,
-    color: '#111827',
-  },
-  settingsDivider: {
-    height: 1,
-    backgroundColor: '#F3F4F6',
-  },
-  settingsItemDanger: {
-    color: '#EF4444',
-  },
-})

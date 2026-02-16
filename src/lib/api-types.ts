@@ -87,7 +87,16 @@ export interface paths {
         path?: never
         cookie?: never
       }
-      requestBody?: never
+      requestBody?: {
+        content: {
+          'application/json': {
+            /** @description 決済完了後のリダイレクト先 URL */
+            successUrl?: string
+            /** @description 決済キャンセル時のリダイレクト先 URL */
+            cancelUrl?: string
+          }
+        }
+      }
       responses: {
         /** @description Success */
         200: {

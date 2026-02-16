@@ -9,7 +9,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -194,18 +193,20 @@ export default function SignInScreen() {
   if (pendingMFA) {
     const label = MFA_LABELS[mfaStrategy]
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView className="flex-1 bg-gray-50">
         <KeyboardAvoidingView
-          style={styles.inner}
+          className="flex-1"
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-          <View style={styles.form}>
-            <Text style={styles.title}>Lydos</Text>
-            <Text style={styles.subtitle}>{label.title}</Text>
-            <Text style={styles.description}>{label.description}</Text>
+          <View className="px-6">
+            <Text className="text-[32px] font-bold text-gray-900 text-center mb-2">Lydos</Text>
+            <Text className="text-xl text-gray-500 text-center mb-8">{label.title}</Text>
+            <Text className="text-sm text-gray-500 text-center mb-6 leading-[22px]">
+              {label.description}
+            </Text>
 
             <TextInput
-              style={styles.input}
+              className="border border-gray-300 rounded-xl px-4 py-[14px] mb-4 text-base text-gray-900 bg-white"
               placeholder="確認コード"
               placeholderTextColor="#9CA3AF"
               value={mfaCode}
@@ -216,37 +217,37 @@ export default function SignInScreen() {
             />
 
             <TouchableOpacity
-              style={[styles.button, (!mfaCode || loading) && styles.buttonDisabled]}
+              className={`bg-gray-900 rounded-xl py-[14px] items-center mt-2${!mfaCode || loading ? ' opacity-50' : ''}`}
               onPress={handleMFAVerify}
               disabled={!mfaCode || loading}
             >
               {loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={styles.buttonText}>確認</Text>
+                <Text className="text-white text-base font-semibold">確認</Text>
               )}
             </TouchableOpacity>
 
             {hasBackupCode && mfaStrategy !== 'backup_code' && (
               <TouchableOpacity
-                style={styles.linkButton}
+                className="mt-5 items-center"
                 onPress={() => {
                   setMfaStrategy('backup_code')
                   setMfaCode('')
                 }}
               >
-                <Text style={styles.linkText}>バックアップコードを使用する</Text>
+                <Text className="text-gray-500 text-sm">バックアップコードを使用する</Text>
               </TouchableOpacity>
             )}
 
             <TouchableOpacity
-              style={styles.linkButton}
+              className="mt-5 items-center"
               onPress={() => {
                 setPendingMFA(false)
                 setMfaCode('')
               }}
             >
-              <Text style={styles.linkText}>← ログイン画面に戻る</Text>
+              <Text className="text-gray-500 text-sm">← ログイン画面に戻る</Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -256,21 +257,26 @@ export default function SignInScreen() {
 
   // ログイン画面
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-gray-50">
       <KeyboardAvoidingView
-        style={styles.inner}
+        className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <ScrollView
-          contentContainerStyle={styles.scroll}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: 'center',
+            paddingHorizontal: 24,
+            paddingVertical: 32,
+          }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.title}>Lydos</Text>
-          <Text style={styles.subtitle}>ログイン</Text>
+          <Text className="text-[32px] font-bold text-gray-900 text-center mb-2">Lydos</Text>
+          <Text className="text-xl text-gray-500 text-center mb-8">ログイン</Text>
 
           <TextInput
-            style={styles.input}
+            className="border border-gray-300 rounded-xl px-4 py-[14px] mb-4 text-base text-gray-900 bg-white"
             placeholder="メールアドレス"
             placeholderTextColor="#9CA3AF"
             value={email}
@@ -280,7 +286,7 @@ export default function SignInScreen() {
             autoComplete="email"
           />
           <TextInput
-            style={styles.input}
+            className="border border-gray-300 rounded-xl px-4 py-[14px] mb-4 text-base text-gray-900 bg-white"
             placeholder="パスワード"
             placeholderTextColor="#9CA3AF"
             value={password}
@@ -289,25 +295,25 @@ export default function SignInScreen() {
           />
 
           <TouchableOpacity
-            style={[styles.button, (!email || !password || loading) && styles.buttonDisabled]}
+            className={`bg-gray-900 rounded-xl py-[14px] items-center mt-2${!email || !password || loading ? ' opacity-50' : ''}`}
             onPress={handleSignIn}
             disabled={!email || !password || loading}
           >
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.buttonText}>ログイン</Text>
+              <Text className="text-white text-base font-semibold">ログイン</Text>
             )}
           </TouchableOpacity>
 
-          <View style={styles.dividerRow}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>または</Text>
-            <View style={styles.dividerLine} />
+          <View className="flex-row items-center my-5 gap-3">
+            <View className="flex-1 h-px bg-gray-200" />
+            <Text className="text-[13px] text-gray-400">または</Text>
+            <View className="flex-1 h-px bg-gray-200" />
           </View>
 
           <TouchableOpacity
-            style={[styles.googleButton, googleLoading && styles.buttonDisabled]}
+            className={`flex-row items-center justify-center gap-[10px] border border-gray-300 rounded-xl py-[14px] bg-white${googleLoading ? ' opacity-50' : ''}`}
             onPress={handleGoogleSignIn}
             disabled={googleLoading}
           >
@@ -316,14 +322,14 @@ export default function SignInScreen() {
             ) : (
               <>
                 <GoogleIcon size={20} />
-                <Text style={styles.googleButtonText}>Google でログイン</Text>
+                <Text className="text-base font-medium text-gray-700">Google でログイン</Text>
               </>
             )}
           </TouchableOpacity>
 
           <Link href="/sign-up" asChild>
-            <TouchableOpacity style={styles.linkButton}>
-              <Text style={styles.linkText}>アカウントをお持ちでない方はこちら</Text>
+            <TouchableOpacity className="mt-5 items-center">
+              <Text className="text-gray-500 text-sm">アカウントをお持ちでない方はこちら</Text>
             </TouchableOpacity>
           </Link>
         </ScrollView>
@@ -331,107 +337,3 @@ export default function SignInScreen() {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F9FAFB',
-  },
-  inner: {
-    flex: 1,
-  },
-  scroll: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 32,
-  },
-  form: {
-    paddingHorizontal: 24,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#111827',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 20,
-    color: '#6B7280',
-    textAlign: 'center',
-    marginBottom: 32,
-  },
-  description: {
-    fontSize: 14,
-    color: '#6B7280',
-    textAlign: 'center',
-    marginBottom: 24,
-    lineHeight: 22,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    marginBottom: 16,
-    fontSize: 16,
-    color: '#111827',
-    backgroundColor: '#fff',
-  },
-  button: {
-    backgroundColor: '#111827',
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonDisabled: {
-    opacity: 0.5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
-    gap: 12,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#E5E7EB',
-  },
-  dividerText: {
-    fontSize: 13,
-    color: '#9CA3AF',
-  },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 12,
-    paddingVertical: 14,
-    backgroundColor: '#fff',
-  },
-  googleButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#374151',
-  },
-  linkButton: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  linkText: {
-    color: '#6B7280',
-    fontSize: 14,
-  },
-})

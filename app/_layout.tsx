@@ -1,3 +1,4 @@
+import '../global.css'
 import { ClerkLoaded, ClerkProvider } from '@clerk/clerk-expo'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Stack } from 'expo-router'

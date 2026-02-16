@@ -8,7 +8,6 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -85,18 +84,20 @@ export default function SignUpScreen() {
 
   if (pendingVerification) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView className="flex-1 bg-gray-50">
         <KeyboardAvoidingView
-          style={styles.inner}
+          className="flex-1"
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-          <View style={styles.form}>
-            <Text style={styles.title}>Lydos</Text>
-            <Text style={styles.subtitle}>メール確認</Text>
-            <Text style={styles.description}>{email} に送信された確認コードを入力してください</Text>
+          <View className="px-6">
+            <Text className="text-[32px] font-bold text-gray-900 text-center mb-2">Lydos</Text>
+            <Text className="text-xl text-gray-500 text-center mb-8">メール確認</Text>
+            <Text className="text-sm text-gray-500 text-center mb-6 leading-[22px]">
+              {email} に送信された確認コードを入力してください
+            </Text>
 
             <TextInput
-              style={styles.input}
+              className="border border-gray-300 rounded-xl px-4 py-[14px] mb-4 text-base text-gray-900 bg-white"
               placeholder="確認コード"
               placeholderTextColor="#9CA3AF"
               value={code}
@@ -106,14 +107,14 @@ export default function SignUpScreen() {
             />
 
             <TouchableOpacity
-              style={[styles.button, (!code || loading) && styles.buttonDisabled]}
+              className={`bg-gray-900 rounded-xl py-[14px] items-center mt-2${!code || loading ? ' opacity-50' : ''}`}
               onPress={handleVerify}
               disabled={!code || loading}
             >
               {loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={styles.buttonText}>確認</Text>
+                <Text className="text-white text-base font-semibold">確認</Text>
               )}
             </TouchableOpacity>
           </View>
@@ -123,18 +124,18 @@ export default function SignUpScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-gray-50">
       <KeyboardAvoidingView
-        style={styles.inner}
+        className="flex-1 justify-center"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View style={styles.form}>
-          <Text style={styles.title}>Lydos</Text>
-          <Text style={styles.subtitle}>新規登録</Text>
+        <View className="px-6">
+          <Text className="text-[32px] font-bold text-gray-900 text-center mb-2">Lydos</Text>
+          <Text className="text-xl text-gray-500 text-center mb-8">新規登録</Text>
 
-          <View style={styles.nameRow}>
+          <View className="flex-row gap-2">
             <TextInput
-              style={[styles.input, styles.nameInput]}
+              className="flex-1 border border-gray-300 rounded-xl px-4 py-[14px] mb-4 text-base text-gray-900 bg-white"
               placeholder="姓"
               placeholderTextColor="#9CA3AF"
               value={lastName}
@@ -142,7 +143,7 @@ export default function SignUpScreen() {
               autoComplete="family-name"
             />
             <TextInput
-              style={[styles.input, styles.nameInput]}
+              className="flex-1 border border-gray-300 rounded-xl px-4 py-[14px] mb-4 text-base text-gray-900 bg-white"
               placeholder="名"
               placeholderTextColor="#9CA3AF"
               value={firstName}
@@ -151,7 +152,7 @@ export default function SignUpScreen() {
             />
           </View>
           <TextInput
-            style={styles.input}
+            className="border border-gray-300 rounded-xl px-4 py-[14px] mb-4 text-base text-gray-900 bg-white"
             placeholder="メールアドレス"
             placeholderTextColor="#9CA3AF"
             value={email}
@@ -161,7 +162,7 @@ export default function SignUpScreen() {
             autoComplete="email"
           />
           <TextInput
-            style={styles.input}
+            className="border border-gray-300 rounded-xl px-4 py-[14px] mb-4 text-base text-gray-900 bg-white"
             placeholder="パスワード"
             placeholderTextColor="#9CA3AF"
             value={password}
@@ -170,25 +171,25 @@ export default function SignUpScreen() {
           />
 
           <TouchableOpacity
-            style={[styles.button, (!email || !password || loading) && styles.buttonDisabled]}
+            className={`bg-gray-900 rounded-xl py-[14px] items-center mt-2${!email || !password || loading ? ' opacity-50' : ''}`}
             onPress={handleSignUp}
             disabled={!email || !password || loading}
           >
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.buttonText}>登録</Text>
+              <Text className="text-white text-base font-semibold">登録</Text>
             )}
           </TouchableOpacity>
 
-          <View style={styles.dividerRow}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>または</Text>
-            <View style={styles.dividerLine} />
+          <View className="flex-row items-center my-5 gap-3">
+            <View className="flex-1 h-px bg-gray-200" />
+            <Text className="text-[13px] text-gray-400">または</Text>
+            <View className="flex-1 h-px bg-gray-200" />
           </View>
 
           <TouchableOpacity
-            style={[styles.googleButton, googleLoading && styles.buttonDisabled]}
+            className={`flex-row items-center justify-center gap-[10px] border border-gray-300 rounded-xl py-[14px] bg-white${googleLoading ? ' opacity-50' : ''}`}
             onPress={handleGoogleSignUp}
             disabled={googleLoading}
           >
@@ -197,14 +198,14 @@ export default function SignUpScreen() {
             ) : (
               <>
                 <GoogleIcon size={20} />
-                <Text style={styles.googleButtonText}>Google で登録</Text>
+                <Text className="text-base font-medium text-gray-700">Google で登録</Text>
               </>
             )}
           </TouchableOpacity>
 
           <Link href="/" asChild>
-            <TouchableOpacity style={styles.linkButton}>
-              <Text style={styles.linkText}>すでにアカウントをお持ちの方はこちら</Text>
+            <TouchableOpacity className="mt-5 items-center">
+              <Text className="text-gray-500 text-sm">すでにアカウントをお持ちの方はこちら</Text>
             </TouchableOpacity>
           </Link>
         </View>
@@ -212,109 +213,3 @@ export default function SignUpScreen() {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F9FAFB',
-  },
-  inner: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  form: {
-    paddingHorizontal: 24,
-  },
-  nameRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  nameInput: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#111827',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 20,
-    color: '#6B7280',
-    textAlign: 'center',
-    marginBottom: 32,
-  },
-  description: {
-    fontSize: 14,
-    color: '#6B7280',
-    textAlign: 'center',
-    marginBottom: 24,
-    lineHeight: 22,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    marginBottom: 16,
-    fontSize: 16,
-    color: '#111827',
-    backgroundColor: '#fff',
-  },
-  button: {
-    backgroundColor: '#111827',
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonDisabled: {
-    opacity: 0.5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
-    gap: 12,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#E5E7EB',
-  },
-  dividerText: {
-    fontSize: 13,
-    color: '#9CA3AF',
-  },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 12,
-    paddingVertical: 14,
-    backgroundColor: '#fff',
-  },
-  googleButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#374151',
-  },
-  linkButton: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  linkText: {
-    color: '#6B7280',
-    fontSize: 14,
-  },
-})
