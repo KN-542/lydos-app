@@ -1,7 +1,7 @@
 # lydos-app
 
 Lydos の React Native モバイルアプリ (Expo)。
-何を作るかは不明です。
+簡易AIチャットアプリになりました。
 
 ---
 
