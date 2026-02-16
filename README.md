@@ -1,6 +1,7 @@
 # lydos-app
 
 Lydos の React Native モバイルアプリ (Expo)。
+何を作るかは不明です。
 
 ---
 
@@ -65,32 +66,6 @@ bun run format:check
 
 # API 型定義の再生成 (lydos-api 起動後に実行)
 bun run generate:api
-```
-
----
-
-## ルート構成
-
-```
-app/
-├── _layout.tsx                        # ルートレイアウト (ClerkProvider + QueryClientProvider)
-├── index.tsx                          # ログイン画面
-├── sign-up.tsx                        # 新規登録画面 (メール確認あり)
-└── (authenticated)/
-    ├── _layout.tsx                    # 認証ガード
-    └── home/
-        └── index.tsx                  # チャット画面
-
-src/
-├── components/
-│   └── AuthProvider.tsx               # Clerk トークンを API クライアントに設定
-├── hooks/
-│   └── useRequireAuth.ts              # 認証状態チェック・未認証時リダイレクト
-└── lib/
-    ├── api.ts                         # openapi-fetch クライアント
-    ├── api-types.ts                   # 自動生成型 (generate:api で更新)
-    ├── openapi.json                   # OpenAPI スキーマ (generate:api で更新)
-    └── tokenCache.ts                  # Clerk トークンの SecureStore キャッシュ
 ```
 
 ---
