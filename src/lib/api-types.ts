@@ -46,7 +46,7 @@ export interface paths {
                         };
                     };
                 };
-                /** @description Internal Server Error */
+                /** @description 予期せぬエラーが発生しました */
                 500: {
                     headers: {
                         [name: string]: unknown;
@@ -127,7 +127,18 @@ export interface paths {
                         };
                     };
                 };
-                /** @description Internal Server Error */
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: string;
+                        };
+                    };
+                };
+                /** @description 予期せぬエラーが発生しました */
                 500: {
                     headers: {
                         [name: string]: unknown;
@@ -191,7 +202,29 @@ export interface paths {
                         };
                     };
                 };
-                /** @description Internal Server Error */
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: string;
+                        };
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: string;
+                        };
+                    };
+                };
+                /** @description 予期せぬエラーが発生しました */
                 500: {
                     headers: {
                         [name: string]: unknown;
@@ -245,7 +278,29 @@ export interface paths {
                     };
                     content?: never;
                 };
-                /** @description Internal Server Error */
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: string;
+                        };
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: string;
+                        };
+                    };
+                };
+                /** @description 予期せぬエラーが発生しました */
                 500: {
                     headers: {
                         [name: string]: unknown;
@@ -303,7 +358,29 @@ export interface paths {
                         "application/json": Record<string, never>;
                     };
                 };
-                /** @description Internal Server Error */
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: string;
+                        };
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: string;
+                        };
+                    };
+                };
+                /** @description 予期せぬエラーが発生しました */
                 500: {
                     headers: {
                         [name: string]: unknown;
@@ -366,7 +443,7 @@ export interface paths {
                         };
                     };
                 };
-                /** @description Internal Server Error */
+                /** @description 予期せぬエラーが発生しました */
                 500: {
                     headers: {
                         [name: string]: unknown;
@@ -437,7 +514,7 @@ export interface paths {
                         };
                     };
                 };
-                /** @description Internal Server Error */
+                /** @description 予期せぬエラーが発生しました */
                 500: {
                     headers: {
                         [name: string]: unknown;
@@ -507,7 +584,7 @@ export interface paths {
                         };
                     };
                 };
-                /** @description Internal Server Error */
+                /** @description 予期せぬエラーが発生しました */
                 500: {
                     headers: {
                         [name: string]: unknown;
@@ -579,7 +656,7 @@ export interface paths {
                         };
                     };
                 };
-                /** @description Internal Server Error */
+                /** @description 予期せぬエラーが発生しました */
                 500: {
                     headers: {
                         [name: string]: unknown;
@@ -633,7 +710,7 @@ export interface paths {
                     };
                     content?: never;
                 };
-                /** @description Internal Server Error */
+                /** @description 予期せぬエラーが発生しました */
                 500: {
                     headers: {
                         [name: string]: unknown;
