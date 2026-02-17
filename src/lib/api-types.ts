@@ -202,17 +202,6 @@ export interface paths {
                         };
                     };
                 };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
                 /** @description Unauthorized */
                 401: {
                     headers: {
