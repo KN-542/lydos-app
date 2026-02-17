@@ -4,737 +4,737 @@
  */
 
 export interface paths {
-    "/setting/plans": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * プラン一覧取得
-         * @description 利用可能なプラン一覧を取得します
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            plans: {
-                                /** @example 1 */
-                                id: number;
-                                /** @example 無料プラン */
-                                name: string;
-                                /** @example 基本的な機能が利用できます */
-                                description: string;
-                                /** @example 0 */
-                                price: number;
-                                /** @example false */
-                                isSelected: boolean;
-                            }[];
-                        };
-                    };
-                };
-                /** @description 予期せぬエラーが発生しました */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/setting/checkout-session": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Checkout Session作成
-         * @description カード登録用のCheckout Sessionを作成します。
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": {
-                        /**
-                         * Format: uri
-                         * @description 決済完了後のリダイレクト先 URL
-                         */
-                        successUrl?: string;
-                        /**
-                         * Format: uri
-                         * @description 決済キャンセル時のリダイレクト先 URL
-                         */
-                        cancelUrl?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @description Stripe Checkout Session URL */
-                            checkoutUrl: string;
-                        };
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-                /** @description 予期せぬエラーが発生しました */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/setting/payment-methods": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 支払い方法一覧取得
-         * @description 登録済みの支払い方法一覧を取得します。
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @description List of payment methods */
-                            paymentMethods: {
-                                /** @description Payment Method ID */
-                                id: string;
-                                /** @description Card brand (visa, mastercard, etc.) */
-                                brand: string;
-                                /** @description Last 4 digits of card */
-                                last4: string;
-                                /** @description Expiration month */
-                                expMonth: number;
-                                /** @description Expiration year */
-                                expYear: number;
-                                /** @description Whether this is the default payment method */
-                                isDefault: boolean;
-                            }[];
-                        };
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-                /** @description 予期せぬエラーが発生しました */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/setting/payment-methods/{paymentMethodId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * 支払い方法削除
-         * @description 指定した支払い方法を削除します。
-         */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Stripe Payment Method ID (pm_xxx) */
-                    paymentMethodId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-                /** @description 予期せぬエラーが発生しました */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/setting/plan": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * プラン変更
-         * @description 支払い方法を指定してプランを変更します。
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": {
-                        /** @description 変更先プラン ID */
-                        planId: number;
-                        /** @description Stripe Payment Method ID (pm_xxx) */
-                        paymentMethodId: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-                /** @description 予期せぬエラーが発生しました */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/chat/models": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * AIモデル一覧取得
-         * @description 利用可能なAIモデルの一覧を取得します
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            models: {
-                                /** @example 1 */
-                                id: number;
-                                /** @example Gemini 2.0 Flash */
-                                name: string;
-                                /** @example gemini-2.0-flash */
-                                modelId: string;
-                                /** @example gemini */
-                                provider: string;
-                                /** @example #4285F4 */
-                                color: string;
-                                /** @example true */
-                                isDefault: boolean;
-                            }[];
-                        };
-                    };
-                };
-                /** @description 予期せぬエラーが発生しました */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/chat/sessions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * チャットセッション一覧取得
-         * @description ログインユーザーのチャットセッション一覧を取得します
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            sessions: {
-                                /** @example clxxxxx */
-                                id: string;
-                                /** @example 新しいチャット */
-                                title: string;
-                                /** @example 1 */
-                                modelId: number;
-                                /** @example Gemini 2.0 Flash */
-                                modelName: string;
-                                /**
-                                 * Format: date-time
-                                 * @example 2026-01-01T00:00:00.000Z
-                                 */
-                                createdAt: string;
-                                /**
-                                 * Format: date-time
-                                 * @example 2026-01-01T00:00:00.000Z
-                                 */
-                                updatedAt: string;
-                            }[];
-                        };
-                    };
-                };
-                /** @description 予期せぬエラーが発生しました */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        /**
-         * チャットセッション作成
-         * @description 新しいチャットセッションを作成します
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": {
-                        /** @description 使用するAIモデルID */
-                        modelId: number;
-                        /** @description セッションタイトル（省略時: "新しいチャット"） */
-                        title?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @example clxxxxx */
-                            id: string;
-                        };
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-                /** @description 予期せぬエラーが発生しました */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/chat/sessions/{sessionId}/messages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * メッセージ一覧取得
-         * @description 指定セッションのメッセージ履歴を取得します
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description チャットセッションID */
-                    sessionId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            messages: {
-                                /** @example 1 */
-                                id: number;
-                                /**
-                                 * @example user
-                                 * @enum {string}
-                                 */
-                                role: "user" | "assistant";
-                                /** @example こんにちは */
-                                content: string;
-                                /** @example 10 */
-                                inputTokens: number | null;
-                                /** @example 50 */
-                                outputTokens: number | null;
-                                /**
-                                 * Format: date-time
-                                 * @example 2026-01-01T00:00:00.000Z
-                                 */
-                                createdAt: string;
-                            }[];
-                        };
-                    };
-                };
-                /** @description 予期せぬエラーが発生しました */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/chat/sessions/{sessionId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * チャットセッション削除
-         * @description 指定セッションとそのメッセージ履歴をすべて削除します
-         */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description チャットセッションID */
-                    sessionId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description 予期せぬエラーが発生しました */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+  '/setting/plans': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * プラン一覧取得
+     * @description 利用可能なプラン一覧を取得します
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              plans: {
+                /** @example 1 */
+                id: number
+                /** @example 無料プラン */
+                name: string
+                /** @example 基本的な機能が利用できます */
+                description: string
+                /** @example 0 */
+                price: number
+                /** @example false */
+                isSelected: boolean
+              }[]
+            }
+          }
+        }
+        /** @description 予期せぬエラーが発生しました */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/setting/checkout-session': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Checkout Session作成
+     * @description カード登録用のCheckout Sessionを作成します。
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: {
+        content: {
+          'application/json': {
+            /**
+             * Format: uri
+             * @description 決済完了後のリダイレクト先 URL
+             */
+            successUrl?: string
+            /**
+             * Format: uri
+             * @description 決済キャンセル時のリダイレクト先 URL
+             */
+            cancelUrl?: string
+          }
+        }
+      }
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              /** @description Stripe Checkout Session URL */
+              checkoutUrl: string
+            }
+          }
+        }
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+        /** @description 予期せぬエラーが発生しました */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/setting/payment-methods': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 支払い方法一覧取得
+     * @description 登録済みの支払い方法一覧を取得します。
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              /** @description List of payment methods */
+              paymentMethods: {
+                /** @description Payment Method ID */
+                id: string
+                /** @description Card brand (visa, mastercard, etc.) */
+                brand: string
+                /** @description Last 4 digits of card */
+                last4: string
+                /** @description Expiration month */
+                expMonth: number
+                /** @description Expiration year */
+                expYear: number
+                /** @description Whether this is the default payment method */
+                isDefault: boolean
+              }[]
+            }
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+        /** @description 予期せぬエラーが発生しました */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/setting/payment-methods/{paymentMethodId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * 支払い方法削除
+     * @description 指定した支払い方法を削除します。
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description Stripe Payment Method ID (pm_xxx) */
+          paymentMethodId: string
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+        /** @description 予期せぬエラーが発生しました */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/setting/plan': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * プラン変更
+     * @description 支払い方法を指定してプランを変更します。
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: {
+        content: {
+          'application/json': {
+            /** @description 変更先プラン ID */
+            planId: number
+            /** @description Stripe Payment Method ID (pm_xxx) */
+            paymentMethodId: string
+          }
+        }
+      }
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+        /** @description 予期せぬエラーが発生しました */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/chat/models': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * AIモデル一覧取得
+     * @description 利用可能なAIモデルの一覧を取得します
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              models: {
+                /** @example 1 */
+                id: number
+                /** @example Gemini 2.0 Flash */
+                name: string
+                /** @example gemini-2.0-flash */
+                modelId: string
+                /** @example gemini */
+                provider: string
+                /** @example #4285F4 */
+                color: string
+                /** @example true */
+                isDefault: boolean
+              }[]
+            }
+          }
+        }
+        /** @description 予期せぬエラーが発生しました */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/chat/sessions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * チャットセッション一覧取得
+     * @description ログインユーザーのチャットセッション一覧を取得します
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              sessions: {
+                /** @example clxxxxx */
+                id: string
+                /** @example 新しいチャット */
+                title: string
+                /** @example 1 */
+                modelId: number
+                /** @example Gemini 2.0 Flash */
+                modelName: string
+                /**
+                 * Format: date-time
+                 * @example 2026-01-01T00:00:00.000Z
+                 */
+                createdAt: string
+                /**
+                 * Format: date-time
+                 * @example 2026-01-01T00:00:00.000Z
+                 */
+                updatedAt: string
+              }[]
+            }
+          }
+        }
+        /** @description 予期せぬエラーが発生しました */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * チャットセッション作成
+     * @description 新しいチャットセッションを作成します
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: {
+        content: {
+          'application/json': {
+            /** @description 使用するAIモデルID */
+            modelId: number
+            /** @description セッションタイトル（省略時: "新しいチャット"） */
+            title?: string
+          }
+        }
+      }
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              /** @example clxxxxx */
+              id: string
+            }
+          }
+        }
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+        /** @description 予期せぬエラーが発生しました */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/chat/sessions/{sessionId}/messages': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * メッセージ一覧取得
+     * @description 指定セッションのメッセージ履歴を取得します
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description チャットセッションID */
+          sessionId: string
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              messages: {
+                /** @example 1 */
+                id: number
+                /**
+                 * @example user
+                 * @enum {string}
+                 */
+                role: 'user' | 'assistant'
+                /** @example こんにちは */
+                content: string
+                /** @example 10 */
+                inputTokens: number | null
+                /** @example 50 */
+                outputTokens: number | null
+                /**
+                 * Format: date-time
+                 * @example 2026-01-01T00:00:00.000Z
+                 */
+                createdAt: string
+              }[]
+            }
+          }
+        }
+        /** @description 予期せぬエラーが発生しました */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/chat/sessions/{sessionId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * チャットセッション削除
+     * @description 指定セッションとそのメッセージ履歴をすべて削除します
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description チャットセッションID */
+          sessionId: string
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 予期せぬエラーが発生しました */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              error: string
+            }
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 export interface components {
-    schemas: never;
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+  schemas: never
+  responses: never
+  parameters: never
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
-export type $defs = Record<string, never>;
-export type operations = Record<string, never>;
+export type $defs = Record<string, never>
+export type operations = Record<string, never>

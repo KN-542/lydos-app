@@ -1,7 +1,7 @@
 import { useClerk, useUser } from '@clerk/clerk-expo'
 import { router } from 'expo-router'
 import { ChevronDown, Menu, Plus, Send, Settings, Trash2, X } from 'lucide-react-native'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ActivityIndicator,
   Alert,
@@ -75,6 +75,8 @@ export default function ChatScreen() {
   }, [defaultModel, selectedModelId])
 
   // メッセージ追加・ストリーミング時にスクロール
+  // ref 操作に state を依存配列へ入れるのは本来不要だが、
+  // 変化のたびにスクロールをトリガーする手段として意図的に指定している
   // biome-ignore lint/correctness/useExhaustiveDependencies: scroll trigger
   useEffect(() => {
     scrollViewRef.current?.scrollToEnd({ animated: true })
@@ -86,17 +88,14 @@ export default function ChatScreen() {
   }, [isStreaming])
 
   // ドロワーアニメーション
-  const toggleDrawer = useCallback(
-    (open: boolean) => {
-      setIsDrawerOpen(open)
-      Animated.timing(drawerAnim, {
-        toValue: open ? 0 : -DRAWER_WIDTH,
-        duration: 250,
-        useNativeDriver: true,
-      }).start()
-    },
-    [drawerAnim]
-  )
+  const toggleDrawer = (open: boolean) => {
+    setIsDrawerOpen(open)
+    Animated.timing(drawerAnim, {
+      toValue: open ? 0 : -DRAWER_WIDTH,
+      duration: 250,
+      useNativeDriver: true,
+    }).start()
+  }
 
   const handleSendMessage = async () => {
     if (prompt.trim() === '' || isStreaming || !selectedModel) return

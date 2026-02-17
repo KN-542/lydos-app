@@ -2,7 +2,7 @@ import { useAuth, useSignIn, useSSO } from '@clerk/clerk-expo'
 import * as Linking from 'expo-linking'
 import { Link, router } from 'expo-router'
 import * as WebBrowser from 'expo-web-browser'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ActivityIndicator,
   Alert,
@@ -67,39 +67,36 @@ export default function SignInScreen() {
   //   lydos-view は <SignIn /> ビルトインコンポーネントを使っているため同現象が出ない。
   //   対策候補: `if (!totp && !phone)` に変更して backup_code のみなら MFA 画面を出さない。
   //   ただしその場合 backup_code のみのアカウントが完全にログイン不能になるトレードオフあり。
-  const handleSecondFactor = useCallback(
-    async (
-      factors: Array<{ strategy: string; phoneNumberId?: string }>,
-      preparePhone: (id: string) => Promise<unknown>
-    ) => {
-      const totp = factors.find((f) => f.strategy === 'totp')
-      const phone = factors.find((f) => f.strategy === 'phone_code')
-      const backup = factors.find((f) => f.strategy === 'backup_code')
+  const handleSecondFactor = async (
+    factors: Array<{ strategy: string; phoneNumberId?: string }>,
+    preparePhone: (id: string) => Promise<unknown>
+  ) => {
+    const totp = factors.find((f) => f.strategy === 'totp')
+    const phone = factors.find((f) => f.strategy === 'phone_code')
+    const backup = factors.find((f) => f.strategy === 'backup_code')
 
-      if (!totp && !phone && !backup) {
-        // 認識できる MFA 方式がない（MFA 未設定 + Force 2FA 等）
-        Alert.alert(
-          '二段階認証が必要です',
-          'アカウントに二段階認証が設定されていません。Clerk ダッシュボードで認証アプリを設定してください。'
-        )
-        return
-      }
+    if (!totp && !phone && !backup) {
+      // 認識できる MFA 方式がない（MFA 未設定 + Force 2FA 等）
+      Alert.alert(
+        '二段階認証が必要です',
+        'アカウントに二段階認証が設定されていません。Clerk ダッシュボードで認証アプリを設定してください。'
+      )
+      return
+    }
 
-      setHasBackupCode(!!backup)
+    setHasBackupCode(!!backup)
 
-      if (totp) {
-        setMfaStrategy('totp')
-      } else if (phone) {
-        await preparePhone(phone.phoneNumberId ?? '')
-        setMfaStrategy('phone_code')
-      } else {
-        setMfaStrategy('backup_code')
-      }
+    if (totp) {
+      setMfaStrategy('totp')
+    } else if (phone) {
+      await preparePhone(phone.phoneNumberId ?? '')
+      setMfaStrategy('phone_code')
+    } else {
+      setMfaStrategy('backup_code')
+    }
 
-      setPendingMFA(true)
-    },
-    []
-  )
+    setPendingMFA(true)
+  }
 
   // FIXME: lydos-view の <SignIn /> ビルトインコンポーネントでブラウザ登録したアカウントが
   //   iOS アプリではログインできない。lydos-app で iOS 登録したアカウントはログイン可能。
@@ -109,7 +106,7 @@ export default function SignInScreen() {
   //   試した対策: 2 ステップフロー (create → attemptFirstFactor) に変更 → ブラウザアカウントで不可
   //   要調査: Clerk ダッシュボードの Instance 設定（Username 必須 / Email verification 戦略等）と
   //           実際に返ってくる status / supportedFirstFactors の値。
-  const handleSignIn = useCallback(async () => {
+  const handleSignIn = async () => {
     if (!isLoaded || !signIn || loading) return
     setLoading(true)
     try {
@@ -132,9 +129,9 @@ export default function SignInScreen() {
     } finally {
       setLoading(false)
     }
-  }, [isLoaded, signIn, loading, email, password, setActive, handleSecondFactor])
+  }
 
-  const handleMFAVerify = useCallback(async () => {
+  const handleMFAVerify = async () => {
     if (!isLoaded || !signIn || loading) return
     setLoading(true)
     try {
@@ -153,9 +150,9 @@ export default function SignInScreen() {
     } finally {
       setLoading(false)
     }
-  }, [isLoaded, signIn, loading, mfaStrategy, mfaCode, setActive])
+  }
 
-  const handleGoogleSignIn = useCallback(async () => {
+  const handleGoogleSignIn = async () => {
     if (googleLoading) return
     setGoogleLoading(true)
     try {
@@ -187,7 +184,7 @@ export default function SignInScreen() {
     } finally {
       setGoogleLoading(false)
     }
-  }, [googleLoading, startSSOFlow, handleSecondFactor])
+  }
 
   // MFA 画面
   if (pendingMFA) {

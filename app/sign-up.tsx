@@ -2,7 +2,7 @@ import { useSignUp, useSSO } from '@clerk/clerk-expo'
 import * as Linking from 'expo-linking'
 import { Link, router } from 'expo-router'
 import * as WebBrowser from 'expo-web-browser'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import {
   ActivityIndicator,
   Alert,
@@ -30,7 +30,7 @@ export default function SignUpScreen() {
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
 
-  const handleSignUp = useCallback(async () => {
+  const handleSignUp = async () => {
     if (!isLoaded || loading) return
     setLoading(true)
     try {
@@ -43,9 +43,9 @@ export default function SignUpScreen() {
     } finally {
       setLoading(false)
     }
-  }, [isLoaded, loading, signUp, firstName, lastName, email, password])
+  }
 
-  const handleVerify = useCallback(async () => {
+  const handleVerify = async () => {
     if (!isLoaded || loading) return
     setLoading(true)
     try {
@@ -60,9 +60,9 @@ export default function SignUpScreen() {
     } finally {
       setLoading(false)
     }
-  }, [isLoaded, loading, signUp, code, setActive])
+  }
 
-  const handleGoogleSignUp = useCallback(async () => {
+  const handleGoogleSignUp = async () => {
     if (googleLoading) return
     setGoogleLoading(true)
     try {
@@ -80,7 +80,7 @@ export default function SignUpScreen() {
     } finally {
       setGoogleLoading(false)
     }
-  }, [googleLoading, startSSOFlow])
+  }
 
   if (pendingVerification) {
     return (
