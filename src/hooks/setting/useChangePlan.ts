@@ -14,6 +14,7 @@ export function useChangePlan() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plans'] })
+      queryClient.invalidateQueries({ queryKey: ['chat-models'] })
       Alert.alert('完了', 'プランを変更しました')
     },
     onError: () => {
